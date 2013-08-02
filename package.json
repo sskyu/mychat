@@ -1,0 +1,21 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "3.3.4",
+    "ejs": "*",
+    "stylus": "*",
+    "express-resource": "~1.0.0",
+    "socket.io": "~0.9.16",
+    "express-partials": "~0.1.1",
+    "redis": "~0.8.4",
+    "connect-redis": "~1.4.5",
+    "cookie": "~0.1.0",
+    "async": "~0.2.9",
+    "moment": "~2.1.0"
+  }
+}

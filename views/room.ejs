@@ -1,0 +1,56 @@
+
+<div>
+    <a id="jsCreateRoom" href="#">部屋の作成</a>
+    <form action="/logout" method="post" style="display: inline; margin-left: 30px;">
+        <input type="submit" value="ログアウト">
+    </form>
+</div>
+<ul id="roomList"></ul>
+
+<script type="text/javascript">
+    $(function() {
+        var socket = io.connect('/room');
+        var roomCount = 0;
+
+        function prependRoom(room) {
+            var a = $('<a/>')
+                .data('roomName', room.name)
+                .data('number', room.number)
+                .text(++roomCount + ' : ' + room.name + ' (' + room.number + '人)')
+                .attr('href', '/chat/' + room.id);
+            $('#roomList').prepend($('<li/>').attr('id', room.id).append(a));
+        }
+        function countup(data, n) {
+            var a = $('#' + data).children('a');
+            var number = a.data('number') + n;
+            a.data('number', number);
+            a.text(a.text().replace(/\d+(?=人\)$)/, number));
+        }
+
+        socket.on('room created', function(room) {
+            prependRoom(room);
+        });
+        socket.on('room entered', function(data) {
+            countup(data, +1);
+        });
+        socket.on('room left', function(data) {
+            countup(data, -1);
+        });
+        socket.on('room deleted', function(data) {
+            $('#' + data).remove();
+        });
+
+        $('#jsCreateRoom').on('click', function() {
+            var roomName = prompt('スレ名を入力してね', '');
+            if (!roomName) return false;
+            socket.emit('create room', { roomName: roomName }, function(room) {
+                $(location).attr('href', '/chat/' + room.id);
+            });
+        });
+        socket.emit('get room list', null, function(rooms) {
+            _.each(rooms, function(room) {
+                prependRoom(room);
+            });
+        });
+    });
+</script>
