@@ -21,7 +21,7 @@
 
     $(function(){
         var socket = io.connect('/chat');
-        var roomId = $.url().attr('path').slice(1);
+        var roomId = $.url().attr('path').slice(6);
 
         socket.on('get room name', function(data) {
             $('#roomName').text(data);

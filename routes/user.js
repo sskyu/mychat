@@ -15,13 +15,10 @@ module.exports = {
         res.send("new: called as GET method");
     }
     ,create: function(req, res){
+        // create: called as POST method
         if (!req.body.name) return require('./index').index(req, res);
-        console.log('>> ' + req.body.name);
-        console.log(req.session);
         req.session.user = { name: req.body.name };
-        console.log('sess_user: ' + req.session.user);
         res.redirect('/rooms');
-        // res.send("create: called as POST method");
     }
     ,show: function(req, res){
         res.send("show: called as GET method");

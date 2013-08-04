@@ -38,11 +38,12 @@ app.configure(function() {
 
     // development only
     if ('development' == app.get('env')) {
-      app.use(express.errorHandler());
+        app.use(express.errorHandler());
     }
 });
 
 app.get('/', routes.index);
+app.post('/logout', routes.logout);
 // app.get('/users', user.list);
 app.resource('users', require('./routes/user'));
 app.resource('rooms', require('./routes/room'), { id: 'id' });
@@ -52,13 +53,11 @@ var http = http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
 
-
 // Socket.IO
 var io = require('socket.io').listen(http, {
-    'sotre': require('socket.io/lib/stores/redis'),
-    'log level': 1,
-    authorization: function(handshakeData, next){
-        console.log(handshakeData);
+    'sotre'        : new require('socket.io').RedisStore,
+    'log level'    : 1,
+    'authorization': function(handshakeData, next){
         var cookie = handshakeData.headers.cookie;
         if (!cookie) return next('Cookie not found.', false);
         cookie = require('cookie').parse(decodeURIComponent(handshakeData.headers.cookie));
@@ -73,10 +72,3 @@ var io = require('socket.io').listen(http, {
 });
 
 require('./socket').init(io);
-
-io.sockets.on('connection', function(socket){
-    console.log('>> connect');
-    socket.on('send message', function(data){
-        socket.emit('reply message', data);
-    });
-});

@@ -11,7 +11,6 @@ module.exports = {
     }
     ,create: function(req, res){
         if (!req.body.roomName) return require('./index').index(req, res);
-        console.log('POST ROOM -> ' + req.body.roomName);
         res.send("create: called as POST method");
     }
     ,show: function(req, res){

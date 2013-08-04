@@ -10,15 +10,11 @@ module.exports = {
     }
     ,create: function(req, res){
         if (!req.body.name) return require('./index').index(req, res);
-        console.log('>> ' + req.body.name);
-        console.log(req.session);
         req.session.user = { name: req.body.name };
-        console.log('sess_user: ' + req.session.user);
         res.redirect('/rooms');
         // res.send("create: called as POST method");
     }
     ,show: function(req, res){
-        console.log('hogehgoe');
         if (!req.session.user) return res.redirect('/');
 
         client.hexists('room:name', req.params.id, function(err, exist) {

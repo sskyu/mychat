@@ -41,7 +41,7 @@
         });
 
         $('#jsCreateRoom').on('click', function() {
-            var roomName = prompt('スレ名を入力してね', '');
+            var roomName = prompt('スレ名を入力してね！！', '');
             if (!roomName) return false;
             socket.emit('create room', { roomName: roomName }, function(room) {
                 $(location).attr('href', '/chat/' + room.id);
